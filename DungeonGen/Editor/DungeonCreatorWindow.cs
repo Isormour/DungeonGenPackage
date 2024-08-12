@@ -26,7 +26,7 @@ public class DungeonCreatorWindow : EditorWindow
             return _config;
         } 
     }
-    [MenuItem("Tools/DB/Dungeon Creator")]
+    [MenuItem("DB/Tools/Dungeon Creator")]
     public static void OpenWindow()
     {
         _config = FindAsset<ConditionsConfig>(FOLDER_PATH+"Conditions_Config.asset"); 
