@@ -1,0 +1,6 @@
+{
+  "name": "com.db.dungeongen",
+  "displayName": "Dungeon_Geneneration",
+  "version": "0.0.1",
+  "description": "Dungeon generation using wave function collapse"
+}

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f655237b366348469e77254fe6c35ad, type: 3}
+  m_Name: CornerRoomPassLeft
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 8955380377237878220, guid: da3001cc09f865f4398d873a3d509e2c, type: 3}
+  Condition:
+    Top: 16
+    Bottom: 2
+    Left: 4
+    Right: 8
+    Optionals:
+    - dir: 0
+      condition: 4
+    - dir: 2
+      condition: 4
+  IsRotateable: 1
+  IsSymetric: 0
