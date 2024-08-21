@@ -6,21 +6,50 @@ using WFC;
 internal class OptionsManager : DungeonCreatorPage
 {
 
-    const string OPTIONS_PATH = DungeonCreatorWindow.FOLDER_PATH+"/GeneratedOptions/";
-    const string PROTOTYPES_PATH = DungeonCreatorWindow.FOLDER_PATH+"/CollapsePrototypes";
+    string OPTIONS_PATH = DungeonCreatorWindow.configMain.MainFolderPath + "/GeneratedOptions/";
+    string PROTOTYPES_PATH = DungeonCreatorWindow.configMain.MainFolderPath + "/CollapsePrototypes";
+    const string PROTOTYPES_PREF_KEY = "Prototypes_Pref_Key";
+    const string OPTIONS_PREF_KEY = "Options_Pref_Key";
 
     CollapseOptionPrototype[] prototypes;
     bool drawPrototypes = false;
+    string currentPrototypesPath = "";
+    string currentOptionsPath = "";
     public OptionsManager(string name) : base(name)
     {
-       prototypes =  DungeonCreatorWindow.FindAssets<CollapseOptionPrototype>(PROTOTYPES_PATH).ToArray();
+        currentPrototypesPath = PlayerPrefs.GetString(PROTOTYPES_PREF_KEY, "");
+        currentOptionsPath = PlayerPrefs.GetString(OPTIONS_PREF_KEY, "");
+        if (currentPrototypesPath == "") currentPrototypesPath = PROTOTYPES_PATH;
+        prototypes = DungeonCreatorWindow.FindAssets<CollapseOptionPrototype>(currentPrototypesPath).ToArray();
     }
 
 
     public override void Draw()
     {
         base.Draw();
-        if (GUILayout.Button("Draw Options " + prototypes.Length))
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Prototype Path"))
+        {
+            currentPrototypesPath = EditorUtility.OpenFolderPanel("Select Directory", currentPrototypesPath, "pick prototypes folder");
+            if (currentPrototypesPath != "")
+                PlayerPrefs.SetString(PROTOTYPES_PREF_KEY, currentPrototypesPath);
+        }
+        EditorGUILayout.LabelField(currentPrototypesPath);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Options Path"))
+        {
+            currentOptionsPath = EditorUtility.OpenFolderPanel("Select Directory", currentOptionsPath, "pick prototypes folder");
+            if (currentOptionsPath != "")
+                PlayerPrefs.SetString(OPTIONS_PREF_KEY, currentOptionsPath);
+        }
+        EditorGUILayout.LabelField(currentOptionsPath);
+        EditorGUILayout.EndHorizontal();
+
+
+        EditorGUILayout.Space(10);
+        if (GUILayout.Button("Draw prototypes " + prototypes.Length))
         {
             drawPrototypes = !drawPrototypes;
         }
@@ -54,7 +83,7 @@ internal class OptionsManager : DungeonCreatorPage
         CollapseOption basicOption = new CollapseOption();
         CollapseCondition pCond = prototype.Condition;
         basicOption.Condition = prototype.Condition;
-        basicOption.Condition.Optionals =  pCond.GetOptionals();
+        basicOption.Condition.Optionals = pCond.GetOptionals();
         basicOption.Prefab = prototype.Prefab;
         generatedOptions.Add(basicOption);
 

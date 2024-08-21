@@ -9,7 +9,7 @@ internal class ConditionConfigPage : DungeonCreatorPage
     public ConditionConfigPage(string name) : base(name)
     {
         enumNames = Enum.GetNames(typeof(ECondition));
-        config = DungeonCreatorWindow.FindAsset<ConditionsConfig>(DungeonCreatorWindow.FOLDER_PATH+"/Conditions_Config.asset");
+        config = DungeonCreatorWindow.FindAsset<ConditionsConfig>(DungeonCreatorWindow.folderPath+"/Conditions_Config.asset");
     }
     public override void Draw()
     {
