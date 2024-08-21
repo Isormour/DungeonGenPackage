@@ -31,6 +31,7 @@ internal class OptionsManager : DungeonCreatorPage
         if (GUILayout.Button("Prototype Path"))
         {
             currentPrototypesPath = EditorUtility.OpenFolderPanel("Select Directory", currentPrototypesPath, "pick prototypes folder");
+            currentPrototypesPath = currentPrototypesPath.Substring(Application.dataPath.Length - "Assets".Length);
             if (currentPrototypesPath != "")
                 PlayerPrefs.SetString(PROTOTYPES_PREF_KEY, currentPrototypesPath);
         }
@@ -41,6 +42,7 @@ internal class OptionsManager : DungeonCreatorPage
         if (GUILayout.Button("Options Path"))
         {
             currentOptionsPath = EditorUtility.OpenFolderPanel("Select Directory", currentOptionsPath, "pick prototypes folder");
+            currentOptionsPath = currentOptionsPath.Substring(Application.dataPath.Length - "Assets".Length);
             if (currentOptionsPath != "")
                 PlayerPrefs.SetString(OPTIONS_PREF_KEY, currentOptionsPath);
         }
