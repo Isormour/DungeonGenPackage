@@ -75,7 +75,7 @@ internal class OptionsManager : DungeonCreatorPage
     {
         foreach (var item in options)
         {
-            AssetDatabase.CreateAsset(item, OPTIONS_PATH + item.name + ".asset");
+            AssetDatabase.CreateAsset(item, currentOptionsPath + item.name + ".asset");
         }
     }
     List<CollapseOption> CreateOptions(CollapseOptionPrototype prototype)
