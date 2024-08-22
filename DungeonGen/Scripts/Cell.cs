@@ -27,7 +27,8 @@ namespace WFC
         public bool collapsed { private set; get; } = false;
         public GameObject CellObject { private set; get; }
 
-        public Cell(int x, int y, CollapseOption[] options)
+        DungeonProfile dungeonProfile;
+        public Cell(int x, int y, CollapseOption[] options, DungeonProfile dungeonProfile)
         {
             this.x = x;
             this.y = y;
@@ -37,6 +38,7 @@ namespace WFC
                 collaspeOptions[i] = options[i];
             }
             EntropyValue = options.Length;
+            this.dungeonProfile = dungeonProfile;
         }
         public void SetNeighbours(Cell top, Cell bottom, Cell left, Cell right)
         {
@@ -89,12 +91,12 @@ namespace WFC
             }
             return neibhours;
         }
-        public void Collapse(Transform parent, CollapseOption[] options,bool createWorldObject)
+        public void Collapse(Transform parent, CollapseOption[] options, bool createWorldObject)
         {
             this.collaspeOptions = options;
             Collapse(parent, createWorldObject);
         }
-        public void Collapse(Transform parent,bool createWorldObject)
+        public void Collapse(Transform parent, bool createWorldObject)
         {
             List<CollapseOption> properOptions = FindProperOptions(collaspeOptions, GetCollapseCondition());
             currentOption = properOptions[UnityEngine.Random.Range(0, properOptions.Count)];
@@ -102,10 +104,10 @@ namespace WFC
             if (createWorldObject)
             {
                 GameObject cellInstance = GameObject.Instantiate(currentOption.Prefab);
-                cellInstance.transform.localPosition = new Vector3(x, 0, y);
+                cellInstance.transform.localPosition = new Vector3(x, 0, y) * dungeonProfile.cellSize;
                 cellInstance.transform.localRotation = Quaternion.Euler(0, currentOption.RotatedAngle, 0);
                 cellInstance.transform.SetParent(parent);
-                cellInstance.name = currentOption.name+"_x"+x+"y"+y;
+                cellInstance.name = currentOption.name + "_x" + x + "y" + y;
                 CellObject = cellInstance;
             }
             condition = currentOption.Condition;

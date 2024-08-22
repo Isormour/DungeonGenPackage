@@ -15,11 +15,13 @@ namespace WFC
         public DungeonRoomInterpreter roomInterpreter { private set; get; }
         public DungeonProfile dungeonProfile { private set; get; }
 
-        public DungeonRequirments  restrictions;
+        public DungeonRequirments restrictions;
+
+        [SerializeField] float cellScale = 1;
 
         private void Awake()
         {
-            DungeonProfile profile = new DungeonProfile();
+            DungeonProfile profile = new DungeonProfile(cellScale);
             profile.requrementsData = restrictions;
             Initialize(profile);
         }
@@ -75,7 +77,7 @@ namespace WFC
             Transform Root = new GameObject("Rebuild Dungeon").transform;
             for (int i = 0; i < data.Levels.Count; i++)
             {
-                Transform Branch = new GameObject("Branch "+i).transform;
+                Transform Branch = new GameObject("Branch " + i).transform;
                 Branch.SetParent(Root);
                 for (int j = 0; j < data.Levels[i].LevelCells.Count; j++)
                 {
@@ -84,18 +86,18 @@ namespace WFC
                     GameObject cellObject = Instantiate(cellObjectPrefab);
                     cellObject.transform.SetParent(Branch);
                     cellObject.transform.position = cell.Position;
-                    cellObject.transform.rotation = Quaternion.Euler(0,options[cell.OptionID].RotatedAngle,0);
+                    cellObject.transform.rotation = Quaternion.Euler(0, options[cell.OptionID].RotatedAngle, 0);
                 }
             }
             for (int i = 1; i < data.Levels.Count; i++)
             {
-                int stairsCellId = data.Levels[i-1].ExitId;
+                int stairsCellId = data.Levels[i - 1].ExitId;
 
-                Vector3 targetPosition = data.Levels[i-1].LevelCells[stairsCellId].Position +new Vector3(0, 1, 0);
+                Vector3 targetPosition = data.Levels[i - 1].LevelCells[stairsCellId].Position + new Vector3(0, 1, 0);
 
                 GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 stairsObject.name = "stairs";
-                stairsObject.transform.localScale =  new Vector3(0.75f, 1.0f, 0.75f);
+                stairsObject.transform.localScale = new Vector3(0.75f, 1.0f, 0.75f);
                 stairsObject.transform.position = targetPosition - new Vector3(0, 0.5f, 0);
                 stairsObject.transform.SetParent(Root);
 

@@ -6,9 +6,11 @@ public class DungeonProfile
 {
     public List<DungeonLevel> levels;
     public DungeonRequirments requrementsData;
-    public DungeonProfile()
+    public float cellSize { private set; get; } = 1;
+    public DungeonProfile(float cellSize)
     {
         levels = new List<DungeonLevel>();
+        this.cellSize = cellSize;
     }
     public class DungeonLevel
     {
@@ -28,5 +30,5 @@ public class DungeonProfile
             MultiplePass = new List<Cell>();
         }
     }
-   
+
 }

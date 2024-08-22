@@ -1,7 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using UnityEngine;
 using WFC;
 
 public class DungeonCreator
@@ -113,7 +112,7 @@ public class DungeonCreator
     }
     void GenerateRequirements()
     {
-        for (int i = currentRequrements.Count-1; i >=0 ; i--)
+        for (int i = currentRequrements.Count - 1; i >= 0; i--)
         {
             Requrement req = currentRequrements[i];
             PlaceReqiredOption(req);
@@ -123,7 +122,7 @@ public class DungeonCreator
 
     private void PlaceReqiredOption(Requrement req)
     {
-      
+
         foreach (CollapseOption opt in req.Options)
         {
             int tries = 0;
@@ -141,11 +140,11 @@ public class DungeonCreator
                 {
                     grid[x, y].Collapse(dungeonParent, new CollapseOption[] { req.Options[0] }, true);
                     cells.Remove(grid[x, y]);
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
                     grid[x, y].CellObject.transform.Find("Cube (2)").GetComponent<MeshRenderer>().material.color = Color.white;
                     grid[x, y].CellObject.transform.name += " req";
-                    Debug.Log("placed for x= " + x + "  y= "+y);
-    #endif
+                    Debug.Log("placed for x= " + x + "  y= " + y);
+#endif
                     dontFit = true;
                 }
                 tries++;
