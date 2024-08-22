@@ -13,7 +13,7 @@ public class DungeonCreator
 
     public Transform dungeonParent { private set; get; }
 
-    DungeonProfile profile;
+    DungeonProfile dungeonProfile;
 
     List<Requrement> currentRequrements;
     Requrement[] totalRequirement;
@@ -22,7 +22,7 @@ public class DungeonCreator
         this.width = width;
         this.height = height;
         this.collapseOptions = collapseOptions;
-        this.profile = profile;
+        this.dungeonProfile = profile;
         InitGrid();
         totalRequirement = profile.requrementsData.requrements;
         currentRequrements = profile.requrementsData.requrements.ToList();
@@ -37,7 +37,7 @@ public class DungeonCreator
         {
             for (int j = 0; j < grid.GetLength(1); j++)
             {
-                grid[i, j] = new Cell(i, j, this.collapseOptions);
+                grid[i, j] = new Cell(i, j, this.collapseOptions, dungeonProfile);
                 cells.Add(grid[i, j]);
             }
         }
@@ -160,8 +160,8 @@ public class DungeonCreator
     public void GenerateAll(bool createWorldObject)
     {
         dungeonParent = new GameObject("dungeonParent").transform;
-        totalRequirement = profile.requrementsData.requrements;
-        currentRequrements = profile.requrementsData.requrements.ToList();
+        totalRequirement = dungeonProfile.requrementsData.requrements;
+        currentRequrements = dungeonProfile.requrementsData.requrements.ToList();
         InitGrid();
         GenerateBorder();
         while (cells.Count > 0)

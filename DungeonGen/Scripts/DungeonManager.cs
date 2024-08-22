@@ -21,11 +21,11 @@ namespace WFC
 
         private void Awake()
         {
-            DungeonProfile profile = new DungeonProfile(cellScale);
-            profile.requrementsData = restrictions;
-            Initialize(profile);
+
+
+            Initialize();
         }
-        public void Initialize(DungeonProfile dungeonProfile)
+        public void Initialize()
         {
             if (initialized)
                 return;
@@ -36,9 +36,8 @@ namespace WFC
                     Destroy(Instance.gameObject);
             }
             Instance = this;
-            this.dungeonProfile = dungeonProfile;
-
-
+            DungeonProfile profile = new DungeonProfile(cellScale);
+            profile.requrementsData = restrictions;
         }
         // Start is called before the first frame update
         void Start()

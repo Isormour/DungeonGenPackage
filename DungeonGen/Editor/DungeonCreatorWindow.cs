@@ -49,10 +49,7 @@ public class DungeonCreatorWindow : EditorWindow
         dungeonManagerObject = Instantiate(FindAsset<GameObject>(folderPath + "/DungeonManager.prefab"));
 
         dungeonManager = dungeonManagerObject.GetComponent<DungeonManager>();
-
-        DungeonProfile profile = new DungeonProfile();
-        profile.requrementsData = FindAsset<DungeonRequirments>(folderPath + "/Restrictions/Basic.asset");
-        dungeonManager.Initialize(profile);
+        dungeonManager.Initialize();
         dungeonManager.CreateDungeon(true);
         creatorPage = new DungeonCreationPage("Dungeon Creator", dungeonManager);
         fixRooms = new DungeonCreatorFixRooms("Fix Rooms", dungeonManager);
