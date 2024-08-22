@@ -71,20 +71,18 @@ public class DungeonCreatorWindow : EditorWindow
     private void OnGUI()
     {
         GUILayout.BeginHorizontal();
-        configMain = EditorGUILayout.ObjectField(configMain, typeof(DungeonGenerationConfig), false) as DungeonGenerationConfig;
-        if (GUILayout.Button("ChangeConfig"))
+        DungeonGenerationConfig currentConfig = EditorGUILayout.ObjectField(configMain, typeof(DungeonGenerationConfig), false) as DungeonGenerationConfig;
+        if (currentConfig != configMain)
         {
-            string configPath = PlayerPrefs.GetString(DUNGEON_CREATOR_CONFIG_PREF);
-            configMain = FindAsset<DungeonGenerationConfig>(configPath);
-            configPath = EditorUtility.OpenFolderPanel("Select Directory", configPath, "pick config");
-            configMain = configMain = FindAsset<DungeonGenerationConfig>(configPath);
-
+            PlayerPrefs.SetString(DUNGEON_CREATOR_CONFIG_PREF, AssetDatabase.GetAssetPath(currentConfig));
+            configMain = currentConfig;
             folderPath = configMain.MainFolderPath;
             if (!File.Exists(folderPath + "/GeneratedOptions/"))
             {
                 Directory.CreateDirectory(folderPath + "/GeneratedOptions/");
             }
         }
+
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
