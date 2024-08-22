@@ -7,10 +7,13 @@ public class DungeonProfile
     public List<DungeonLevel> levels;
     public DungeonRequirments requrementsData;
     public float cellSize { private set; get; } = 1;
-    public DungeonProfile(float cellSize)
+    public float levelHeight { private set; get; } = 1;
+
+    public DungeonProfile(float cellSize, float levelHeight)
     {
         levels = new List<DungeonLevel>();
         this.cellSize = cellSize;
+        this.levelHeight = levelHeight;
     }
     public class DungeonLevel
     {

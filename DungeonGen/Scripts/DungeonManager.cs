@@ -18,6 +18,7 @@ namespace WFC
         public DungeonRequirments restrictions;
 
         [SerializeField] float cellScale = 1;
+        [SerializeField] float levelHeight = 1;
 
         private void Awake()
         {
@@ -36,7 +37,7 @@ namespace WFC
                     Destroy(Instance.gameObject);
             }
             Instance = this;
-            dungeonProfile = new DungeonProfile(cellScale);
+            dungeonProfile = new DungeonProfile(cellScale, levelHeight);
             dungeonProfile.requrementsData = restrictions;
         }
         // Start is called before the first frame update

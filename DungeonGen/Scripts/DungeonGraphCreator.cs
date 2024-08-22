@@ -8,8 +8,8 @@ public class DungeonGraphCreator
     public List<Branch> dungeonBranches { private set; get; }
     Transform dungeonParent;
     Cell[,] grid;
-    DungeonProfile currentProfile;
-    public DungeonGraphCreator(Cell[,] grid, Transform dungeonParent,DungeonProfile dungeonProfile)
+    DungeonProfile dungeonProfile;
+    public DungeonGraphCreator(Cell[,] grid, Transform dungeonParent, DungeonProfile dungeonProfile)
     {
         this.grid = grid;
         CellsToCheck = new List<Cell>();
@@ -28,7 +28,7 @@ public class DungeonGraphCreator
                 }
             }
         }
-        currentProfile = dungeonProfile;
+        this.dungeonProfile = dungeonProfile;
 
         dungeonBranches = CreateGraph();
         ReparentBranches(dungeonBranches);
@@ -84,7 +84,7 @@ public class DungeonGraphCreator
         {
 
             DungeonProfile.DungeonLevel level = new DungeonProfile.DungeonLevel();
-            currentProfile.levels.Add(level);
+            dungeonProfile.levels.Add(level);
 
             Branch branch = graph[i];
             branch.FindEnterAndExit();
@@ -107,7 +107,8 @@ public class DungeonGraphCreator
 
         for (int i = 1; i < graph.Count; i++)
         {
-            Vector3 targetPosition = graph[i - 1].cells[1].CellObject.transform.position + new Vector3(0, 1, 0);
+            Vector3 targetPosition = graph[i - 1].cells[1].CellObject.transform.position;
+            targetPosition += new Vector3(0, this.dungeonProfile.levelHeight, 0);
             graph[i].rootObject.transform.position = targetPosition;
             GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             stairsObject.name = "stairs";
@@ -116,7 +117,7 @@ public class DungeonGraphCreator
             stairsObject.transform.SetParent(graph[i].rootObject.transform);
         }
     }
-   public List<Branch> CreateGraph()
+    public List<Branch> CreateGraph()
     {
         List<Branch> branches = new List<Branch>();
         int cellCount = CellsToCheck.Count;
@@ -124,7 +125,7 @@ public class DungeonGraphCreator
         {
             Cell root = CellsToCheck[0];
             List<Cell> temp = new List<Cell>();
-            
+
             List<ECondition> ConnectedConditions = new List<ECondition>
             {
                 ECondition.Pass,
