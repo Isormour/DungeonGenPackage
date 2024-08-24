@@ -19,6 +19,9 @@ namespace WFC
 
         [SerializeField] float cellScale = 1;
         [SerializeField] float levelHeight = 1;
+        [SerializeField] int sizeX = 8;
+        [SerializeField] int sizeY = 6;
+        [SerializeField] bool colorDungeonParts = true;
 
         private void Awake()
         {
@@ -53,11 +56,21 @@ namespace WFC
         }
         public void CreateDungeon(bool createWorldObject)
         {
-            creator = new DungeonCreator(options, 10, 10, dungeonProfile);
+            creator = new DungeonCreator(options, sizeX, sizeY, dungeonProfile);
             creator.GenerateAll(createWorldObject);
             graph = new DungeonGraphCreator(creator.grid, creator.dungeonParent, dungeonProfile);
             roomInterpreter = new DungeonRoomInterpreter(dungeonProfile);
-            this.dungeonProfile = dungeonProfile;
+            CountRooms();
+        }
+
+        public void CountRooms()
+        {
+            int roomCount = 0;
+            for (int i = 0; i < dungeonProfile.levels.Count; i++)
+            {
+                roomCount += dungeonProfile.levels[i].Cells.Count;
+            }
+            Debug.Log("Rooms Count = " + roomCount);
         }
         public void SaveDungeon()
         {
@@ -105,6 +118,7 @@ namespace WFC
         }
         public static void ColorCellObject(Color col, Cell item)
         {
+            if (!Instance.colorDungeonParts) return;
             MeshRenderer[] rends = item.CellObject.GetComponentsInChildren<MeshRenderer>();
             foreach (var rend in rends)
             {

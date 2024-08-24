@@ -65,9 +65,6 @@ public class DungeonGraphCreator
         {
             if (branches[i].cells.Count == 2)
             {
-                Debug.LogWarning("Removed cell" + branches[i].cells[0].CellObject.name);
-                Debug.LogWarning("Removed cell" + branches[i].cells[1].CellObject.name);
-
                 branches[i].Destroy();
                 branches.Remove(branches[i]);
                 i--;

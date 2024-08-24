@@ -79,3 +79,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d5d9d2ba420b844aa76cbeb2ee69b2b, type: 2}
   - {fileID: 11400000, guid: 90034c8f16dee654993d9831746dcfc7, type: 2}
   restrictions: {fileID: 11400000, guid: d0d67438d6b51404aadfcbfdbe253524, type: 2}
+  cellScale: 1
+  levelHeight: 1
+  SizeX: 8
+  SizeY: 7
