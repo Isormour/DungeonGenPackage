@@ -81,5 +81,6 @@ MonoBehaviour:
   restrictions: {fileID: 11400000, guid: d0d67438d6b51404aadfcbfdbe253524, type: 2}
   cellScale: 1
   levelHeight: 1
-  SizeX: 8
-  SizeY: 7
+  sizeX: 10
+  sizeY: 10
+  colorDungeonParts: 1

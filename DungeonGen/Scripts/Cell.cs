@@ -28,6 +28,8 @@ namespace WFC
         public GameObject CellObject { private set; get; }
 
         DungeonProfile dungeonProfile;
+
+        Transform instanceParent;
         public Cell(int x, int y, CollapseOption[] options, DungeonProfile dungeonProfile)
         {
             this.x = x;
@@ -101,20 +103,21 @@ namespace WFC
             List<CollapseOption> properOptions = FindProperOptions(collaspeOptions, GetCollapseCondition());
             currentOption = properOptions[UnityEngine.Random.Range(0, properOptions.Count)];
 
-            if (createWorldObject)
-            {
-                GameObject cellInstance = GameObject.Instantiate(currentOption.Prefab);
-                cellInstance.transform.localPosition = new Vector3(x, 0, y) * dungeonProfile.cellSize;
-                cellInstance.transform.localRotation = Quaternion.Euler(0, currentOption.RotatedAngle, 0);
-                cellInstance.transform.SetParent(parent);
-                cellInstance.name = currentOption.name + "_x" + x + "y" + y;
-                CellObject = cellInstance;
-            }
+
             condition = currentOption.Condition;
             collapsed = true;
             UpdateNeighbourEntropy();
         }
 
+        public void CreatePrefabInstance()
+        {
+            GameObject cellInstance = GameObject.Instantiate(currentOption.Prefab);
+            cellInstance.transform.localPosition = new Vector3(x, 0, y) * dungeonProfile.cellSize;
+            cellInstance.transform.localRotation = Quaternion.Euler(0, currentOption.RotatedAngle, 0);
+            cellInstance.transform.SetParent(instanceParent);
+            cellInstance.name = currentOption.name + "_x" + x + "y" + y;
+            CellObject = cellInstance;
+        }
 
         private void UpdateNeighbourEntropy()
         {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace WFC
 {
+    [ExecuteAlways()]
     public class DungeonManager : MonoBehaviour
     {
         public static DungeonManager Instance;
@@ -25,8 +26,6 @@ namespace WFC
 
         private void Awake()
         {
-
-
             Initialize();
         }
         public void Initialize()
@@ -46,7 +45,7 @@ namespace WFC
         // Start is called before the first frame update
         void Start()
         {
-            LoadDungeon();
+
         }
 
         // Update is called once per frame
@@ -54,15 +53,54 @@ namespace WFC
         {
 
         }
-        public void CreateDungeon(bool createWorldObject)
+        public void CreateDungeon()
         {
-            creator = new DungeonCreator(options, sizeX, sizeY, dungeonProfile);
-            creator.GenerateAll(createWorldObject);
-            graph = new DungeonGraphCreator(creator.grid, creator.dungeonParent, dungeonProfile);
-            roomInterpreter = new DungeonRoomInterpreter(dungeonProfile);
-            CountRooms();
+            bool FitDungeonConditions = false;
+            float creationTime = Time.time;
+            int iterations = 0;
+            while (!FitDungeonConditions)
+            {
+                creator = new DungeonCreator(options, sizeX, sizeY, dungeonProfile);
+                creator.GenerateAll(true);
+                graph = new DungeonGraphCreator(creator.grid, creator.dungeonParent, dungeonProfile);
+                roomInterpreter = new DungeonRoomInterpreter(dungeonProfile);
+                CountRooms();
+                FitDungeonConditions = CheckDungeonConditions(dungeonProfile);
+                iterations++;
+            }
+            Debug.Log("iterations = " + iterations + " At time  = " + (creationTime - Time.time).ToString());
+            CreateDungeonObjects();
+            graph.ReparentBranches();
+            graph.RepositionBranches();
         }
 
+        private bool CheckDungeonConditions(DungeonProfile dungeonProfile)
+        {
+            for (int i = 1; i < dungeonProfile.levels.Count; i++)
+            {
+                CollapseCondition exitCond = dungeonProfile.levels[i - 1].Exit.condition;
+                CollapseCondition entryCond = dungeonProfile.levels[i].Entry.condition;
+                bool exitFit = exitCond.GetConditionAmount(ECondition.Pass) == 1 &&
+                   exitCond.GetConditionAmount(ECondition.Wall) == 3;
+                bool entryFit = entryCond.GetConditionAmount(ECondition.Pass) == 1 &&
+                   entryCond.GetConditionAmount(ECondition.Wall) == 3;
+                if (!entryFit || !exitFit)
+                    return false;
+            }
+            return true;
+        }
+
+
+        void CreateDungeonObjects()
+        {
+            foreach (Branch item in graph.dungeonBranches)
+            {
+                foreach (Cell cell in item.cells)
+                {
+                    cell.CreatePrefabInstance();
+                }
+            }
+        }
         public void CountRooms()
         {
             int roomCount = 0;

@@ -31,8 +31,6 @@ public class DungeonGraphCreator
         this.dungeonProfile = dungeonProfile;
 
         dungeonBranches = CreateGraph();
-        ReparentBranches(dungeonBranches);
-        RepositionBranches(dungeonBranches);
         CleanUp();
     }
     bool CheckCellForCondition(Cell cell, ECondition cond)
@@ -135,7 +133,6 @@ public class DungeonGraphCreator
             Color col = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
             foreach (var item in temp)
             {
-                DungeonManager.ColorCellObject(col, item);
                 CellsToCheck.Remove(item);
             }
             branches.Add(new Branch(temp));

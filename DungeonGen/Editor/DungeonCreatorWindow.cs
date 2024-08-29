@@ -50,7 +50,7 @@ public class DungeonCreatorWindow : EditorWindow
 
         dungeonManager = dungeonManagerObject.GetComponent<DungeonManager>();
         dungeonManager.Initialize();
-        dungeonManager.CreateDungeon(true);
+        dungeonManager.CreateDungeon();
         creatorPage = new DungeonCreationPage("Dungeon Creator", dungeonManager);
         fixRooms = new DungeonCreatorFixRooms("Fix Rooms", dungeonManager);
         interpreter = new DungeonRoomInterpreterPage("Interpreter", dungeonManager);
@@ -120,10 +120,7 @@ public class DungeonCreatorWindow : EditorWindow
 
         if (GUILayout.Button("Generate"))
         {
-            CollapseOption[] options = FindAssets<CollapseOption>(folderPath + "/GeneratedOptions/").ToArray();
-            creatorPage = new DungeonCreationPage("Dungeon Creator", dungeonManager);
-            fixRooms = new DungeonCreatorFixRooms("Fix Rooms", dungeonManager);
-            ChangePage(fixRooms);
+            InitWindow();
         }
 
         currentPage.Draw();

@@ -35,8 +35,8 @@ namespace WFC
             cells.Remove(stairsCell);
             cells.Insert(0, stairsCell);
 
-            Color col = stairsCell.CellObject.GetComponentsInChildren<MeshRenderer>()[1].material.color;
-            DungeonManager.ColorCellObject(col + (col * 0.5f), stairsCell);
+            // Color col = stairsCell.CellObject.GetComponentsInChildren<MeshRenderer>()[1].material.color;
+            // DungeonManager.ColorCellObject(col + (col * 0.5f), stairsCell);
 
             if (singleRooms.Count > 0)
             {
@@ -55,9 +55,9 @@ namespace WFC
             cells.Remove(stairsCell);
             cells.Insert(0, stairsCell);
 
-            DungeonManager.ColorCellObject(col - (col * 0.5f), exitCell);
+            //DungeonManager.ColorCellObject(col - (col * 0.5f), exitCell);
             StairsCell = stairsCell;
-            
+
         }
 
         List<Cell> FindAllCellsWithConditions(List<ECondition> conds, List<int> numberOfOccurances)
@@ -84,7 +84,7 @@ namespace WFC
         public void CreateContainer(Transform MainParent, string name)
         {
             GameObject branchParent = new GameObject(name);
-            branchParent.transform.position = StairsCell.CellObject.transform.position;
+            branchParent.transform.position = new Vector3(StairsCell.x, 0, StairsCell.y);
             branchParent.transform.SetParent(MainParent);
             rootObject = branchParent.transform;
         }
@@ -106,7 +106,7 @@ namespace WFC
             }
 #endif
         }
-       public static void GrowBranch(Cell cell, List<Cell> branch, List<ECondition> conds)
+        public static void GrowBranch(Cell cell, List<Cell> branch, List<ECondition> conds)
         {
             List<Cell> tempNeibhours = cell.GetConnectedNeibhours(conds);
 
@@ -115,7 +115,7 @@ namespace WFC
                 if (!branch.Contains(item))
                 {
                     branch.Add(item);
-                    GrowBranch(item, branch,conds);
+                    GrowBranch(item, branch, conds);
                 }
             }
         }
