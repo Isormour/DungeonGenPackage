@@ -39,8 +39,7 @@ namespace WFC
                     Destroy(Instance.gameObject);
             }
             Instance = this;
-            dungeonProfile = new DungeonProfile(cellScale, levelHeight);
-            dungeonProfile.requrementsData = restrictions;
+            dungeonProfile = new DungeonProfile(cellScale, levelHeight, restrictions);
         }
         // Start is called before the first frame update
         void Start()

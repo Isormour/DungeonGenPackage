@@ -81,10 +81,10 @@ namespace WFC
             }
             return fits;
         }
-        public void CreateContainer(Transform MainParent, string name)
+        public void CreateContainer(Transform MainParent, string name, float cellSize)
         {
             GameObject branchParent = new GameObject(name);
-            branchParent.transform.position = new Vector3(StairsCell.x, 0, StairsCell.y);
+            branchParent.transform.position = new Vector3(StairsCell.x, 0, StairsCell.y) * cellSize;
             branchParent.transform.SetParent(MainParent);
             rootObject = branchParent.transform;
         }

@@ -9,11 +9,12 @@ public class DungeonProfile
     public float cellSize { private set; get; } = 1;
     public float levelHeight { private set; get; } = 1;
 
-    public DungeonProfile(float cellSize, float levelHeight)
+    public DungeonProfile(float cellSize, float levelHeight, DungeonRequirments requrementsData)
     {
         levels = new List<DungeonLevel>();
         this.cellSize = cellSize;
         this.levelHeight = levelHeight;
+        this.requrementsData = requrementsData;
     }
     public class DungeonLevel
     {
