@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170e727232ecc1f4989a128170d2757f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditionConfig: {fileID: 11400000, guid: e8a75d1c4eb7b1f40b349013a9c1f7f4, type: 2}
-  options:
+  ConditionConfig: {fileID: 11400000, guid: e8a75d1c4eb7b1f40b349013a9c1f7f4, type: 2}
+  Options:
   - {fileID: 11400000, guid: c21b735483bd9734ba3ea6eaa1809d6d, type: 2}
   - {fileID: 11400000, guid: b2549fa4506c0d74da5b7700c98042c9, type: 2}
   - {fileID: 11400000, guid: 2197f3396b45fc84da74060965716f8e, type: 2}
@@ -78,6 +78,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 453e76f664e1fda4181d2d9cc0afb1b8, type: 2}
   - {fileID: 11400000, guid: 6d5d9d2ba420b844aa76cbeb2ee69b2b, type: 2}
   - {fileID: 11400000, guid: 90034c8f16dee654993d9831746dcfc7, type: 2}
+  RoomConfigs: []
   restrictions: {fileID: 11400000, guid: d0d67438d6b51404aadfcbfdbe253524, type: 2}
   cellScale: 1
   levelHeight: 1

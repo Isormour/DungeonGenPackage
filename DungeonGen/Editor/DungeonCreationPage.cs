@@ -23,7 +23,7 @@ internal class DungeonCreationPage : DungeonCreatorPage
         base.Draw();
 
       
-        if (GUILayout.Button("Draw Options " + dungeonManager.conditionConfig.conditions.Length))
+        if (GUILayout.Button("Draw Options " + dungeonManager.ConditionConfig.conditions.Length))
         {
             drawOptions = !drawOptions;
         }

@@ -41,7 +41,7 @@ namespace WFC
         static bool CompareMask(Enum a, Enum b)
         {
 
-            ConditionsConfig config = DungeonManager.Instance.conditionConfig;
+            ConditionsConfig config = DungeonManager.Instance.ConditionConfig;
 
             int aMask = config.GetMask((ECondition)a);
             ECondition aEnum = (ECondition)aMask;

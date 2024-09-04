@@ -30,6 +30,7 @@ namespace WFC
         DungeonProfile dungeonProfile;
 
         Transform instanceParent;
+
         public Cell(int x, int y, CollapseOption[] options, DungeonProfile dungeonProfile)
         {
             this.x = x;

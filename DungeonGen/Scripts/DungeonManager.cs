@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
 
@@ -7,8 +8,9 @@ namespace WFC
     public class DungeonManager : MonoBehaviour
     {
         public static DungeonManager Instance;
-        public ConditionsConfig conditionConfig;
-        public CollapseOption[] options;
+        public ConditionsConfig ConditionConfig;
+        public CollapseOption[] Options;
+        public RoomFillConfig[] RoomConfigs;
         bool initialized = false;
 
         public DungeonCreator creator { private set; get; }
@@ -23,10 +25,17 @@ namespace WFC
         [SerializeField] int sizeX = 8;
         [SerializeField] int sizeY = 6;
         [SerializeField] bool colorDungeonParts = true;
+        [SerializeField] bool CreateOnStart = false;
+        [SerializeField] bool LoadOnStart = false;
+
+
 
         private void Awake()
         {
             Initialize();
+            if (CreateOnStart) { CreateDungeon(); };
+            if (LoadOnStart) { LoadDungeon(); };
+
         }
         public void Initialize()
         {
@@ -41,17 +50,6 @@ namespace WFC
             Instance = this;
             dungeonProfile = new DungeonProfile(cellScale, levelHeight, restrictions);
         }
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
         public void CreateDungeon()
         {
             bool FitDungeonConditions = false;
@@ -59,7 +57,7 @@ namespace WFC
             int iterations = 0;
             while (!FitDungeonConditions)
             {
-                creator = new DungeonCreator(options, sizeX, sizeY, dungeonProfile);
+                creator = new DungeonCreator(Options, sizeX, sizeY, dungeonProfile);
                 creator.GenerateAll(true);
                 graph = new DungeonGraphCreator(creator.grid, creator.dungeonParent, dungeonProfile);
                 roomInterpreter = new DungeonRoomInterpreter(dungeonProfile);
@@ -73,7 +71,7 @@ namespace WFC
             graph.RepositionBranches();
         }
 
-        private bool CheckDungeonConditions(DungeonProfile dungeonProfile)
+        protected virtual bool CheckDungeonConditions(DungeonProfile dungeonProfile)
         {
             for (int i = 1; i < dungeonProfile.levels.Count; i++)
             {
@@ -109,20 +107,25 @@ namespace WFC
             }
             Debug.Log("Rooms Count = " + roomCount);
         }
-        public void SaveDungeon()
+        public virtual void SaveDungeon()
         {
             DungeonData data = new DungeonData(dungeonProfile);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented
+            };
+            string dataJson = JsonConvert.SerializeObject(data, settings);
 
-            string dataJson = JsonUtility.ToJson(data);
             File.WriteAllText("Assets/test.json", dataJson);
         }
-        public void LoadDungeon()
+        public virtual void LoadDungeon()
         {
             string jsonData = File.ReadAllText("Assets/test.json");
             DungeonData dungeonData = JsonUtility.FromJson<DungeonData>(jsonData);
             RebuildDungeon(dungeonData);
         }
-        void RebuildDungeon(DungeonData data)
+        protected virtual void RebuildDungeon(DungeonData data)
         {
             Transform Root = new GameObject("Rebuild Dungeon").transform;
             for (int i = 0; i < data.Levels.Count; i++)
@@ -132,18 +135,18 @@ namespace WFC
                 for (int j = 0; j < data.Levels[i].LevelCells.Count; j++)
                 {
                     DungeonData.DungeonCellData cell = data.Levels[i].LevelCells[j];
-                    GameObject cellObjectPrefab = options[cell.OptionID].Prefab;
+                    GameObject cellObjectPrefab = Options[cell.OptionID].Prefab;
                     GameObject cellObject = Instantiate(cellObjectPrefab);
                     cellObject.transform.SetParent(Branch);
-                    cellObject.transform.position = cell.Position;
-                    cellObject.transform.rotation = Quaternion.Euler(0, options[cell.OptionID].RotatedAngle, 0);
+                    cellObject.transform.position = cell.Position();
+                    cellObject.transform.rotation = Quaternion.Euler(0, Options[cell.OptionID].RotatedAngle, 0);
                 }
             }
             for (int i = 1; i < data.Levels.Count; i++)
             {
                 int stairsCellId = data.Levels[i - 1].ExitId;
 
-                Vector3 targetPosition = data.Levels[i - 1].LevelCells[stairsCellId].Position + new Vector3(0, 1, 0);
+                Vector3 targetPosition = data.Levels[i - 1].LevelCells[stairsCellId].Position() + new Vector3(0, 1, 0);
 
                 GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 stairsObject.name = "stairs";
@@ -162,5 +165,18 @@ namespace WFC
                 rend.material.color = rend.material.color * col;
             }
         }
+        public RoomFillConfig GetRoomConfiByID(int id)
+        {
+            for (int i = 0; i < RoomConfigs.Length; i++)
+            {
+                if (RoomConfigs[i].RoomFillId == id)
+                {
+                    return RoomConfigs[i];
+                }
+            }
+            Debug.Log("config not found for id = " + id);
+            return null;
+        }
+
     }
 }

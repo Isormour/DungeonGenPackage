@@ -13,14 +13,17 @@ public class DungeonData
     public class DungeonLevelData
     {
         public List<DungeonCellData> LevelCells;
+
         public int EntryId;
         public int ExitId;
 
         public List<List<int>> Rooms;
         public List<int> SinglePass;
         public List<int> MultiplePass;
+
         public DungeonLevelData(DungeonProfile.DungeonLevel level)
         {
+
             List<Cell> CellToId = level.Cells.ToList();
             //pass all cells
             LevelCells = new List<DungeonCellData>();
@@ -58,12 +61,25 @@ public class DungeonData
     public class DungeonCellData
     {
         public int OptionID;// id=0 -> entry, id==1 -> exit
-        public Vector3 Position;
+        public float PositionX;
+        public float PositionY;
+        public float PositionZ;
+        public RoomFillConfigData FillConfigData;
+        public Vector3 Position()
+        {
+            return new Vector3(PositionX, PositionY, PositionZ);
+        }
         public DungeonCellData(Cell cell)
         {
-            List<CollapseOption> Options = DungeonManager.Instance.options.ToList();
+            List<CollapseOption> Options = DungeonManager.Instance.Options.ToList();
             OptionID = Options.IndexOf(cell.currentOption);
-            Position = cell.CellObject.transform.position;
+
+            PositionX = cell.CellObject.transform.position.x;
+            PositionY = cell.CellObject.transform.position.y;
+            PositionZ = cell.CellObject.transform.position.z;
+
+
+            FillConfigData
         }
     }
     public DungeonData(DungeonProfile profile)
@@ -75,4 +91,5 @@ public class DungeonData
             Levels.Add(levelData);
         }
     }
+
 }
