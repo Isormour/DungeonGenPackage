@@ -9,6 +9,6 @@
     "url": "https://www.unity3d.com"
   },
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": ""
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
   }
 }

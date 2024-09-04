@@ -9,5 +9,6 @@ namespace WFC
         public CollapseCondition Condition;
         public bool IsRotateable;
         public bool IsSymetric;
+        public RoomFillConfig[] configs;
     }
 }

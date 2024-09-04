@@ -140,6 +140,11 @@ namespace WFC
                     cellObject.transform.SetParent(Branch);
                     cellObject.transform.position = cell.Position();
                     cellObject.transform.rotation = Quaternion.Euler(0, Options[cell.OptionID].RotatedAngle, 0);
+                    RoomFillConfigData roomFillConfigData = cell.FillConfigData;
+                    RoomFillConfig config = GetRoomConfiByID(cell.FillConfigData.roomFillId);
+                    config.SetData(cell.FillConfigData);
+                    DungeonRoomFill roomFill = cellObject.GetComponent<DungeonRoomFill>();
+                    roomFill.ApplyConfig(config);
                 }
             }
             for (int i = 1; i < data.Levels.Count; i++)

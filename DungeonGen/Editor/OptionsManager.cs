@@ -20,6 +20,7 @@ internal class OptionsManager : DungeonCreatorPage
         currentPrototypesPath = PlayerPrefs.GetString(PROTOTYPES_PREF_KEY, "");
         currentOptionsPath = PlayerPrefs.GetString(OPTIONS_PREF_KEY, "");
         if (currentPrototypesPath == "") currentPrototypesPath = PROTOTYPES_PATH;
+
         prototypes = DungeonCreatorWindow.FindAssets<CollapseOptionPrototype>(currentPrototypesPath).ToArray();
     }
 
@@ -32,8 +33,14 @@ internal class OptionsManager : DungeonCreatorPage
         {
             currentPrototypesPath = EditorUtility.OpenFolderPanel("Select Directory", currentPrototypesPath, "pick prototypes folder");
             currentPrototypesPath = currentPrototypesPath.Substring(Application.dataPath.Length - "Assets".Length);
+            if (currentPrototypesPath.Contains("DungeonGenPackage"))
+            {
+                currentPrototypesPath = currentPrototypesPath.Replace("DungeonGenPackage", "com.db.dungeongen");
+            }
+
             if (currentPrototypesPath != "")
                 PlayerPrefs.SetString(PROTOTYPES_PREF_KEY, currentPrototypesPath);
+            prototypes = DungeonCreatorWindow.FindAssets<CollapseOptionPrototype>(currentPrototypesPath).ToArray();
         }
         EditorGUILayout.LabelField(currentPrototypesPath);
         EditorGUILayout.EndHorizontal();
@@ -43,6 +50,11 @@ internal class OptionsManager : DungeonCreatorPage
         {
             currentOptionsPath = EditorUtility.OpenFolderPanel("Select Directory", currentOptionsPath, "pick prototypes folder");
             currentOptionsPath = currentOptionsPath.Substring(Application.dataPath.Length - "Assets".Length);
+            if (currentOptionsPath.Contains("DungeonGenPackage"))
+            {
+                currentOptionsPath = currentOptionsPath.Replace("DungeonGenPackage", "com.db.dungeongen");
+            }
+
             if (currentOptionsPath != "")
                 PlayerPrefs.SetString(OPTIONS_PREF_KEY, currentOptionsPath);
         }
@@ -77,6 +89,14 @@ internal class OptionsManager : DungeonCreatorPage
         {
             AssetDatabase.CreateAsset(item, currentOptionsPath + "/" + item.name + ".asset");
         }
+    }
+    public static string FixPathNameForPackage(string path)
+    {
+        string tempPath = path;
+        if (tempPath.Contains("Package"))
+        {
+        }
+        return path;
     }
     List<CollapseOption> CreateOptions(CollapseOptionPrototype prototype)
     {

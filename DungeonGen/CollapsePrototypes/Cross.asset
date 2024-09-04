@@ -21,3 +21,5 @@ MonoBehaviour:
     Optionals: []
   IsRotateable: 0
   IsSymetric: 1
+  configs:
+  - {fileID: 11400000, guid: 49a40c26d9995bb45937a6949e01a9fe, type: 2}

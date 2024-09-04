@@ -105,11 +105,6 @@ public class DungeonGraphCreator
             Vector3 targetPosition = graph[i - 1].cells[1].CellObject.transform.position;
             targetPosition += new Vector3(0, this.dungeonProfile.levelHeight, 0);
             graph[i].rootObject.transform.position = targetPosition;
-            //GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            //stairsObject.name = "stairs";
-            //stairsObject.transform.localScale = MultiplyVector(stairsObject.transform.localScale, new Vector3(0.75f, 1.0f, 0.75f));
-            //stairsObject.transform.position = targetPosition - new Vector3(0, 0.5f, 0);
-            //stairsObject.transform.SetParent(graph[i].rootObject.transform);
         }
     }
     public List<Branch> CreateGraph()

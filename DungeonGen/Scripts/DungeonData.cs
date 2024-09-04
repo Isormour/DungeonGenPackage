@@ -78,8 +78,11 @@ public class DungeonData
             PositionY = cell.CellObject.transform.position.y;
             PositionZ = cell.CellObject.transform.position.z;
 
-
-            FillConfigData
+            if (cell.CellObject && cell.CellObject.GetComponent<DungeonRoomFill>())
+            {
+                if (cell.CellObject.GetComponent<DungeonRoomFill>().config)
+                    FillConfigData = cell.CellObject.GetComponent<DungeonRoomFill>().config.data;
+            }
         }
     }
     public DungeonData(DungeonProfile profile)
