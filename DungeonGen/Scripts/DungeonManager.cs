@@ -52,6 +52,7 @@ namespace WFC
         }
         public void CreateDungeon()
         {
+            dungeonProfile = new DungeonProfile(cellScale, levelHeight, restrictions);
             bool FitDungeonConditions = false;
             float creationTime = Time.time;
             int iterations = 0;
