@@ -99,7 +99,7 @@ public class DungeonGraphCreator
     void RepositionBranches(List<Branch> graph)
     {
         graph.Sort((a, b) => b.cells.Count.CompareTo(a.cells.Count));
-
+        dungeonProfile.levels.Sort((a, b) => b.Cells.Count.CompareTo(a.Cells.Count));
         for (int i = 1; i < graph.Count; i++)
         {
             Vector3 targetPosition = graph[i - 1].cells[1].CellObject.transform.position;

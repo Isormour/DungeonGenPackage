@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ namespace WFC
         [SerializeField] bool CreateOnStart = false;
         [SerializeField] bool LoadOnStart = false;
 
-
+        public Action<DungeonProfile> OnDungeonGenerated;
 
         private void Awake()
         {
@@ -70,6 +71,8 @@ namespace WFC
             CreateDungeonObjects();
             graph.ReparentBranches();
             graph.RepositionBranches();
+
+            OnDungeonGenerated?.Invoke(dungeonProfile);
         }
 
         protected virtual bool CheckDungeonConditions(DungeonProfile dungeonProfile)
