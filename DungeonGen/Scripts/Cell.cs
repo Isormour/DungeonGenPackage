@@ -30,6 +30,7 @@ namespace WFC
         DungeonProfile dungeonProfile;
 
         Transform instanceParent;
+        private DungeonData.DungeonCellData cell;
 
         public Cell(int x, int y, CollapseOption[] options, DungeonProfile dungeonProfile)
         {
@@ -43,6 +44,13 @@ namespace WFC
             EntropyValue = options.Length;
             this.dungeonProfile = dungeonProfile;
         }
+
+        public Cell(DungeonData.DungeonCellData cell, GameObject cellObject)
+        {
+            this.cell = cell;
+            CellObject = cellObject;
+        }
+
         public void SetNeighbours(Cell top, Cell bottom, Cell left, Cell right)
         {
             this.nTop = top;

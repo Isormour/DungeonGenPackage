@@ -33,6 +33,10 @@ public class DungeonProfile
             SinglePass = new List<Cell>();
             MultiplePass = new List<Cell>();
         }
+        public void SetEnableLevel(bool enable)
+        {
+            BranchParent.gameObject.SetActive(enable);
+        }
     }
 
 }

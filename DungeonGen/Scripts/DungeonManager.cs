@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace WFC
 {
@@ -29,7 +29,7 @@ namespace WFC
         [SerializeField] bool CreateOnStart = false;
         [SerializeField] bool LoadOnStart = false;
 
-        public Action<DungeonProfile> OnDungeonGenerated;
+        public UnityEvent<DungeonProfile> OnDungeonGenerated;
 
         private void Awake()
         {
@@ -127,18 +127,24 @@ namespace WFC
         {
             string jsonData = File.ReadAllText("Assets/test.json");
             DungeonData dungeonData = JsonUtility.FromJson<DungeonData>(jsonData);
-            RebuildDungeon(dungeonData);
+            dungeonProfile = new DungeonProfile(cellScale, levelHeight, this.restrictions);
+            RebuildDungeon(dungeonData, dungeonProfile);
+            OnDungeonGenerated?.Invoke(dungeonProfile);
         }
-        protected virtual void RebuildDungeon(DungeonData data)
+        protected virtual void RebuildDungeon(DungeonData data, DungeonProfile profile)
         {
             Transform Root = new GameObject("Rebuild Dungeon").transform;
             for (int i = 0; i < data.Levels.Count; i++)
             {
                 Transform Branch = new GameObject("Branch " + i).transform;
                 Branch.SetParent(Root);
+                DungeonProfile.DungeonLevel level = new DungeonProfile.DungeonLevel();
+                profile.levels.Add(level);
+                level.BranchParent = Branch;
                 for (int j = 0; j < data.Levels[i].LevelCells.Count; j++)
                 {
                     DungeonData.DungeonCellData cell = data.Levels[i].LevelCells[j];
+
                     GameObject cellObjectPrefab = Options[cell.OptionID].Prefab;
                     GameObject cellObject = Instantiate(cellObjectPrefab);
                     cellObject.transform.SetParent(Branch);
@@ -149,12 +155,12 @@ namespace WFC
                     config.SetData(cell.FillConfigData);
                     DungeonRoomFill roomFill = cellObject.GetComponent<DungeonRoomFill>();
                     roomFill.ApplyConfig(config);
+                    level.Cells.Add(new Cell(cell, cellObject));
                 }
             }
             for (int i = 1; i < data.Levels.Count; i++)
             {
                 int stairsCellId = data.Levels[i - 1].ExitId;
-
                 Vector3 targetPosition = data.Levels[i - 1].LevelCells[stairsCellId].Position() + new Vector3(0, 1, 0);
 
                 GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -162,8 +168,25 @@ namespace WFC
                 stairsObject.transform.localScale = new Vector3(0.75f, 1.0f, 0.75f);
                 stairsObject.transform.position = targetPosition - new Vector3(0, 0.5f, 0);
                 stairsObject.transform.SetParent(Root);
-
             }
+            for (int i = 0; i < data.Levels.Count; i++)
+            {
+                profile.levels[i].Entry = profile.levels[i].Cells[data.Levels[i].EntryId];
+                profile.levels[i].Exit = profile.levels[i].Cells[data.Levels[i].ExitId];
+                for (int j = 0; j < data.Levels[i].Rooms.Count; j++)
+                {
+                    profile.levels[i].Rooms.Add(new System.Collections.Generic.List<Cell>());
+                    for (int k = 0; k < data.Levels[i].Rooms[j].Count; k++)
+                    {
+                        profile.levels[i].Rooms[j].Add(profile.levels[i].Cells[data.Levels[i].Rooms[j][k]]);
+                    }
+                }
+                for (int j = 0; j < data.Levels[i].MultiplePass.Count; j++)
+                {
+                    profile.levels[i].MultiplePass.Add(profile.levels[i].Cells[data.Levels[i].MultiplePass[j]]);
+                }
+            }
+
         }
         public static void ColorCellObject(Color col, Cell item)
         {
