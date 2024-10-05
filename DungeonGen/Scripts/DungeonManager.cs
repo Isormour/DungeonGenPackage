@@ -160,7 +160,8 @@ namespace WFC
                 //set neibhours 
                 for (int j = 0; j < level.Cells.Count; j++)
                 {
-
+                    DungeonData.DungeonCellData cell = data.Levels[i].LevelCells[j];
+                    level.Cells[i].SetNeighbours(cell, level.Cells);
                 }
             }
             for (int i = 1; i < data.Levels.Count; i++)
