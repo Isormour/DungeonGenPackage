@@ -30,6 +30,9 @@ namespace WFC
         DungeonProfile dungeonProfile;
 
         Transform instanceParent;
+
+        public Cell[] Neibhours { get { return new Cell[] { nTop, nBottom, nLeft, nRight }; } }
+
         private DungeonData.DungeonCellData cell;
 
         public Cell(int x, int y, CollapseOption[] options, DungeonProfile dungeonProfile)
@@ -57,6 +60,25 @@ namespace WFC
             this.nBottom = bottom;
             this.nRight = right;
             this.nLeft = left;
+        }
+        public void SetNeighbours(DungeonData.DungeonCellData cellData, List<Cell> totalCells)
+        {
+            if (cellData.CellNeibhourTop != -1)
+            {
+                nTop = totalCells[cellData.CellNeibhourTop];
+            }
+            if (cellData.CellNeibhourBottom != -1)
+            {
+                nBottom = totalCells[cellData.CellNeibhourBottom];
+            }
+            if (cellData.CellNeibhourLeft != -1)
+            {
+                nLeft = totalCells[cellData.CellNeibhourLeft];
+            }
+            if (cellData.CellNeibhourRight != -1)
+            {
+                nRight = totalCells[cellData.CellNeibhourRight];
+            }
         }
         public List<Cell> GetConnectedNeibhours(List<ECondition> conds)
         {

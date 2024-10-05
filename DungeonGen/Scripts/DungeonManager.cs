@@ -157,6 +157,11 @@ namespace WFC
                     roomFill.ApplyConfig(config);
                     level.Cells.Add(new Cell(cell, cellObject));
                 }
+                //set neibhours 
+                for (int j = 0; j < level.Cells.Count; j++)
+                {
+
+                }
             }
             for (int i = 1; i < data.Levels.Count; i++)
             {

@@ -31,6 +31,10 @@ public class DungeonData
             {
                 LevelCells.Add(new DungeonCellData(level.Cells[i]));
             }
+            for (int i = 0; i < LevelCells.Count; i++)
+            {
+                LevelCells[i].SetNeibhours(level.Cells[i], level.Cells);
+            }
 
             //room pass ids
             Rooms = new List<List<int>>();
@@ -65,6 +69,10 @@ public class DungeonData
         public float PositionY;
         public float PositionZ;
         public RoomFillConfigData FillConfigData;
+        public int CellNeibhourTop = -1;
+        public int CellNeibhourBottom = -1;
+        public int CellNeibhourLeft = -1;
+        public int CellNeibhourRight = -1;
         public Vector3 Position()
         {
             return new Vector3(PositionX, PositionY, PositionZ);
@@ -82,6 +90,25 @@ public class DungeonData
             {
                 if (cell.CellObject.GetComponent<DungeonRoomFill>().config)
                     FillConfigData = cell.CellObject.GetComponent<DungeonRoomFill>().config.data;
+            }
+        }
+        public void SetNeibhours(Cell cell, List<Cell> Cells)
+        {
+            if (cell.Neibhours[0] != null)
+            {
+                CellNeibhourTop = Cells.IndexOf(cell.Neibhours[0]);
+            }
+            if (cell.Neibhours[1] != null)
+            {
+                CellNeibhourBottom = Cells.IndexOf(cell.Neibhours[1]);
+            }
+            if (cell.Neibhours[2] != null)
+            {
+                CellNeibhourLeft = Cells.IndexOf(cell.Neibhours[2]);
+            }
+            if (cell.Neibhours[3] != null)
+            {
+                CellNeibhourRight = Cells.IndexOf(cell.Neibhours[3]);
             }
         }
     }
