@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,9 +35,11 @@ namespace WFC
         private void Awake()
         {
             Initialize();
+        }
+        private void Start()
+        {
             if (CreateOnStart) { CreateDungeon(); };
             if (LoadOnStart) { LoadDungeon(); };
-
         }
         public void Initialize()
         {
@@ -72,7 +75,7 @@ namespace WFC
             graph.ReparentBranches();
             graph.RepositionBranches();
 
-            OnDungeonGenerated?.Invoke(dungeonProfile);
+            StartCoroutine(DelayDungeonGenerated());
         }
 
         protected virtual bool CheckDungeonConditions(DungeonProfile dungeonProfile)
@@ -129,7 +132,7 @@ namespace WFC
             DungeonData dungeonData = JsonUtility.FromJson<DungeonData>(jsonData);
             dungeonProfile = new DungeonProfile(cellScale, levelHeight, this.restrictions);
             RebuildDungeon(dungeonData, dungeonProfile);
-            OnDungeonGenerated?.Invoke(dungeonProfile);
+            StartCoroutine(DelayDungeonGenerated());
         }
         protected virtual void RebuildDungeon(DungeonData data, DungeonProfile profile)
         {
@@ -150,11 +153,11 @@ namespace WFC
                     cellObject.transform.SetParent(Branch);
                     cellObject.transform.position = cell.Position();
                     cellObject.transform.rotation = Quaternion.Euler(0, Options[cell.OptionID].RotatedAngle, 0);
-                    RoomFillConfigData roomFillConfigData = cell.FillConfigData;
-                    RoomFillConfig config = GetRoomConfiByID(cell.FillConfigData.roomFillId);
-                    config.SetData(cell.FillConfigData);
-                    DungeonRoomFill roomFill = cellObject.GetComponent<DungeonRoomFill>();
-                    roomFill.ApplyConfig(config);
+                    //RoomFillConfigData roomFillConfigData = cell.FillConfigData;
+                    //RoomFillConfig config = GetRoomConfiByID(cell.FillConfigData.roomFillId);
+                    //config.SetData(cell.FillConfigData);
+                    //DungeonRoomFill roomFill = cellObject.GetComponent<DungeonRoomFill>();
+                    //roomFill.ApplyConfig(config);
                     level.Cells.Add(new Cell(cell, cellObject));
                 }
                 //set neibhours 
@@ -179,12 +182,15 @@ namespace WFC
             {
                 profile.levels[i].Entry = profile.levels[i].Cells[data.Levels[i].EntryId];
                 profile.levels[i].Exit = profile.levels[i].Cells[data.Levels[i].ExitId];
-                for (int j = 0; j < data.Levels[i].Rooms.Count; j++)
+                if (data.Levels[i].Rooms != null)
                 {
-                    profile.levels[i].Rooms.Add(new System.Collections.Generic.List<Cell>());
-                    for (int k = 0; k < data.Levels[i].Rooms[j].Count; k++)
+                    for (int j = 0; j < data.Levels[i].Rooms.Count; j++)
                     {
-                        profile.levels[i].Rooms[j].Add(profile.levels[i].Cells[data.Levels[i].Rooms[j][k]]);
+                        profile.levels[i].Rooms.Add(new System.Collections.Generic.List<Cell>());
+                        for (int k = 0; k < data.Levels[i].Rooms[j].Count; k++)
+                        {
+                            profile.levels[i].Rooms[j].Add(profile.levels[i].Cells[data.Levels[i].Rooms[j][k]]);
+                        }
                     }
                 }
                 for (int j = 0; j < data.Levels[i].MultiplePass.Count; j++)
@@ -215,6 +221,10 @@ namespace WFC
             Debug.Log("config not found for id = " + id);
             return null;
         }
-
+        IEnumerator DelayDungeonGenerated()
+        {
+            yield return new WaitForSeconds(0.01f);
+            OnDungeonGenerated?.Invoke(dungeonProfile);
+        }
     }
 }
