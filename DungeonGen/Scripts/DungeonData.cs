@@ -73,6 +73,7 @@ public class DungeonData
         public int CellNeibhourBottom = -1;
         public int CellNeibhourLeft = -1;
         public int CellNeibhourRight = -1;
+        public CollapseCondition condition;
         public Vector3 Position()
         {
             return new Vector3(PositionX, PositionY, PositionZ);
@@ -91,6 +92,7 @@ public class DungeonData
                 if (cell.CellObject.GetComponent<DungeonRoomFill>().config)
                     FillConfigData = cell.CellObject.GetComponent<DungeonRoomFill>().config.data;
             }
+            condition = cell.condition;
         }
         public void SetNeibhours(Cell cell, List<Cell> Cells)
         {
