@@ -52,6 +52,7 @@ namespace WFC
         {
             this.cell = cell;
             CellObject = cellObject;
+            this.condition = cell.condition;
         }
 
         public void SetNeighbours(Cell top, Cell bottom, Cell left, Cell right)
