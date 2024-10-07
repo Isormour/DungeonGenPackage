@@ -6,7 +6,6 @@ using UnityEngine.Events;
 
 namespace WFC
 {
-    [ExecuteAlways()]
     public class DungeonManager : MonoBehaviour
     {
         public static DungeonManager Instance;
