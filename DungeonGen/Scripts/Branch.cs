@@ -81,9 +81,9 @@ namespace WFC
             }
             return fits;
         }
-        public void CreateContainer(Transform MainParent, string name, float cellSize)
+        public void CreateContainer(Transform MainParent, GameObject containerPrefab, string name, float cellSize)
         {
-            GameObject branchParent = new GameObject(name);
+            GameObject branchParent = GameObject.Instantiate(containerPrefab);
             branchParent.transform.position = new Vector3(StairsCell.x, 0, StairsCell.y) * cellSize;
             branchParent.transform.SetParent(MainParent);
             rootObject = branchParent.transform;

@@ -169,6 +169,16 @@ public class DungeonCreator
             Generate(createWorldObject);
         }
     }
+
+    internal void Destroy()
+    {
+#if UNITY_EDITOR
+        GameObject.DestroyImmediate(dungeonParent.gameObject);
+
+#else
+        GameObject.Destroy(dungeonParent.gameObject);
+#endif
+    }
 }
 
 

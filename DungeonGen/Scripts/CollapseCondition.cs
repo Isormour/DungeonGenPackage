@@ -81,6 +81,18 @@ namespace WFC
                 }
             }
         }
+        public void RotateConditionClockwise()
+        {
+            ECondition OldTop = Top;
+            ECondition OldRight = Right;
+            ECondition OldBottom = Bottom;
+            ECondition OldLeft = Left;
+
+            Right = OldTop;
+            Bottom = OldRight;
+            Left = OldBottom;
+            Top = OldLeft;
+        }
         public CollapseConditionOptional[] GetOptionals()
         {
             CollapseConditionOptional[] temp = new CollapseConditionOptional[Optionals.Length];

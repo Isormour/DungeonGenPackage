@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-
 namespace WFC
 {
+    //[ExecuteAlways]
     public class DungeonManager : MonoBehaviour
     {
         public static DungeonManager Instance;
@@ -22,6 +23,8 @@ namespace WFC
         public DungeonRequirments restrictions;
 
         [SerializeField] float cellScale = 1;
+        public float CellScale => cellScale;
+
         [SerializeField] float levelHeight = 1;
         [SerializeField] int sizeX = 8;
         [SerializeField] int sizeY = 6;
@@ -30,6 +33,7 @@ namespace WFC
         [SerializeField] bool LoadOnStart = false;
 
         public UnityEvent<DungeonProfile> OnDungeonGenerated;
+        public GameObject BranchPrefab;
 
         private void Awake()
         {
@@ -52,7 +56,21 @@ namespace WFC
             }
             Instance = this;
             dungeonProfile = new DungeonProfile(cellScale, levelHeight, restrictions);
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged += Cleanup;
+#endif
         }
+#if UNITY_EDITOR
+        void Cleanup(PlayModeStateChange change)
+        {
+            if (change == PlayModeStateChange.ExitingPlayMode)
+            {
+                EditorApplication.playModeStateChanged -= Cleanup;
+                Instance.DestroyDungeon();
+            }
+        }
+
+#endif
         public void CreateDungeon()
         {
             dungeonProfile = new DungeonProfile(cellScale, levelHeight, restrictions);
@@ -69,7 +87,6 @@ namespace WFC
                 FitDungeonConditions = CheckDungeonConditions(dungeonProfile);
                 iterations++;
             }
-            Debug.Log("iterations = " + iterations + " At time  = " + (creationTime - Time.time).ToString());
             CreateDungeonObjects();
             graph.ReparentBranches();
             graph.RepositionBranches();
@@ -122,7 +139,6 @@ namespace WFC
                 Formatting = Formatting.Indented
             };
             string dataJson = JsonConvert.SerializeObject(data, settings);
-
             File.WriteAllText("Assets/test.json", dataJson);
         }
         public virtual void LoadDungeon()
@@ -171,11 +187,13 @@ namespace WFC
                 int stairsCellId = data.Levels[i - 1].ExitId;
                 Vector3 targetPosition = data.Levels[i - 1].LevelCells[stairsCellId].Position() + new Vector3(0, 1, 0);
 
+                /*
                 GameObject stairsObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 stairsObject.name = "stairs";
                 stairsObject.transform.localScale = new Vector3(0.75f, 1.0f, 0.75f);
                 stairsObject.transform.position = targetPosition - new Vector3(0, 0.5f, 0);
                 stairsObject.transform.SetParent(Root);
+                */
             }
             for (int i = 0; i < data.Levels.Count; i++)
             {
@@ -224,6 +242,15 @@ namespace WFC
         {
             yield return new WaitForSeconds(0.01f);
             OnDungeonGenerated?.Invoke(dungeonProfile);
+        }
+
+        public void DestroyDungeon()
+        {
+            creator.Destroy();
+        }
+        private void OnDestroy()
+        {
+            Instance = null;
         }
     }
 }

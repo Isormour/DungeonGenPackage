@@ -11,6 +11,7 @@ public class DungeonManagerEditorWindow : Editor
         if (GUILayout.Button("Generate Dungeon"))
         {
             DungeonManager script = (DungeonManager)target;
+            script.Initialize();
             script.CreateDungeon();
         }
     }

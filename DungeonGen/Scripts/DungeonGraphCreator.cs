@@ -86,7 +86,7 @@ public class DungeonGraphCreator
             level.Entry = branch.cells[0];
             level.Exit = branch.cells[1];
 
-            branch.CreateContainer(dungeonParent, "Branch " + i, dungeonProfile.cellSize);
+            branch.CreateContainer(dungeonParent, DungeonManager.Instance.BranchPrefab, "Branch " + i, dungeonProfile.cellSize);
             branch.ReparentCells();
             level.BranchParent = branch.rootObject;
             level.Cells = branch.cells;
